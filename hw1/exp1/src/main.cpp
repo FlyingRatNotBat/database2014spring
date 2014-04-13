@@ -1,5 +1,6 @@
 #include "SimSearcher.h"
-
+#include <fstream>
+#include <string>
 using namespace std;
 
 int main(int argc, char **argv)
@@ -10,12 +11,19 @@ int main(int argc, char **argv)
 	vector<pair<unsigned, double> > resultJaccard;
 
 	unsigned q = 3, edThreshold = 2;
-	double jaccardThreshold = 0.85;
+	double jaccardThreshold = 0.75;
 
 	searcher.createIndex(argv[1], q);
-	searcher.searchJaccard("query", jaccardThreshold, resultJaccard);
-	searcher.searchED("query", edThreshold, resultED);
 
+	ifstream fin;
+	fin.open(argv[2]);
+	string quary;
+	while(getline(fin, quary))
+	{
+		searcher.searchJaccard(quary.c_str(), jaccardThreshold, resultJaccard);
+		searcher.searchED(quary.c_str(), edThreshold, resultED);
+	}
+	fin.close();
 	return 0;
 }
 
